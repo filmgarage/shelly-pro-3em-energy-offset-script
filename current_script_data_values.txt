@@ -1,0 +1,70 @@
+SHELLY PRO 3EM - DATA VALUES CURRENTLY USED BY THE SCRIPT
+===========================================================
+
+The script currently uses accumulated energy values from the EMData component.
+
+Component: EMData (ID: 0)
+API Call: EMData.GetStatus
+
+VALUES USED IN SCRIPT:
+----------------------
+
+1. a_total_act_energy
+   - Description: Phase A total accumulated active energy
+   - Unit: Wh (Watt-hours)
+   - Type: Number
+   - Used for: Phase A energy display with offset
+
+2. b_total_act_energy
+   - Description: Phase B total accumulated active energy
+   - Unit: Wh (Watt-hours)
+   - Type: Number
+   - Used for: Phase B energy display with offset
+
+3. c_total_act_energy
+   - Description: Phase C total accumulated active energy
+   - Unit: Wh (Watt-hours)
+   - Type: Number
+   - Used for: Phase C energy display with offset
+
+4. total_act
+   - Description: Total accumulated active energy (all phases combined)
+   - Unit: Wh (Watt-hours)
+   - Type: Number
+   - Used for: Total energy display with offset
+
+
+SCRIPT FUNCTIONALITY:
+--------------------
+
+The script:
+1. Reads these 4 energy values every 10 seconds
+2. Adds user-configurable offsets to each value
+3. Converts from Wh to kWh (divides by 1000)
+4. Displays the results in virtual Text components
+5. Rounds to 3 decimal places for display
+
+
+EXAMPLE OUTPUT:
+--------------
+
+EMData.GetStatus returns:
+{
+  "id": 0,
+  "a_total_act_energy": 12500,
+  "b_total_act_energy": 13200,
+  "c_total_act_energy": 11800,
+  "total_act": 37500
+}
+
+With offsets of:
+- Phase A: +5000 Wh
+- Phase B: +3000 Wh
+- Phase C: +2000 Wh
+- Total: +10000 Wh
+
+Script displays:
+- Phase A: 17.500 kWh
+- Phase B: 16.200 kWh
+- Phase C: 13.800 kWh
+- Total: 47.500 kWh

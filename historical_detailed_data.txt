@@ -1,0 +1,485 @@
+SHELLY PRO 3EM - HISTORICAL DETAILED DATA (EMDATA.GETDATA)
+==========================================================
+
+Component: EMData
+API Call: EMData.GetData
+Data Retention: Up to 60 days
+Resolution: 1-minute intervals
+
+This provides minute-by-minute historical data with extensive detail
+for each phase including energy, power, voltage, and current statistics.
+
+
+DATA STRUCTURE:
+===============
+
+EMData.GetData returns arrays of measurements with 49 data points per minute:
+- Energy measurements (accumulated during that minute)
+- Maximum values during that minute
+- Minimum values during that minute
+- Average values during that minute
+
+
+ALL 49 AVAILABLE DATA KEYS:
+============================
+
+PHASE A (16 parameters):
+------------------------
+
+1. a_total_act_energy
+   - Total active energy consumed in this period
+   - Unit: Wh
+
+2. a_fund_act_energy
+   - Fundamental active energy (excluding harmonics)
+   - Unit: Wh
+
+3. a_total_act_ret_energy
+   - Total active energy returned in this period
+   - Unit: Wh
+
+4. a_fund_act_ret_energy
+   - Fundamental active returned energy
+   - Unit: Wh
+
+5. a_lag_react_energy
+   - Lagging reactive energy
+   - Unit: VARh (Volt-Ampere Reactive hours)
+
+6. a_lead_react_energy
+   - Leading reactive energy
+   - Unit: VARh
+
+7. a_max_act_power
+   - Maximum active power during period
+   - Unit: W
+
+8. a_min_act_power
+   - Minimum active power during period
+   - Unit: W
+
+9. a_max_aprt_power
+   - Maximum apparent power during period
+   - Unit: VA
+
+10. a_min_aprt_power
+    - Minimum apparent power during period
+    - Unit: VA
+
+11. a_max_voltage
+    - Maximum voltage during period
+    - Unit: V
+
+12. a_min_voltage
+    - Minimum voltage during period
+    - Unit: V
+
+13. a_avg_voltage
+    - Average voltage during period
+    - Unit: V
+
+14. a_max_current
+    - Maximum current during period
+    - Unit: A
+
+15. a_min_current
+    - Minimum current during period
+    - Unit: A
+
+16. a_avg_current
+    - Average current during period
+    - Unit: A
+
+
+PHASE B (16 parameters):
+------------------------
+
+17. b_total_act_energy
+    - Total active energy consumed
+    - Unit: Wh
+
+18. b_fund_act_energy
+    - Fundamental active energy
+    - Unit: Wh
+
+19. b_total_act_ret_energy
+    - Total active energy returned
+    - Unit: Wh
+
+20. b_fund_act_ret_energy
+    - Fundamental active returned energy
+    - Unit: Wh
+
+21. b_lag_react_energy
+    - Lagging reactive energy
+    - Unit: VARh
+
+22. b_lead_react_energy
+    - Leading reactive energy
+    - Unit: VARh
+
+23. b_max_act_power
+    - Maximum active power
+    - Unit: W
+
+24. b_min_act_power
+    - Minimum active power
+    - Unit: W
+
+25. b_max_aprt_power
+    - Maximum apparent power
+    - Unit: VA
+
+26. b_min_aprt_power
+    - Minimum apparent power
+    - Unit: VA
+
+27. b_max_voltage
+    - Maximum voltage
+    - Unit: V
+
+28. b_min_voltage
+    - Minimum voltage
+    - Unit: V
+
+29. b_avg_voltage
+    - Average voltage
+    - Unit: V
+
+30. b_max_current
+    - Maximum current
+    - Unit: A
+
+31. b_min_current
+    - Minimum current
+    - Unit: A
+
+32. b_avg_current
+    - Average current
+    - Unit: A
+
+
+PHASE C (16 parameters):
+------------------------
+
+33. c_total_act_energy
+    - Total active energy consumed
+    - Unit: Wh
+
+34. c_fund_act_energy
+    - Fundamental active energy
+    - Unit: Wh
+
+35. c_total_act_ret_energy
+    - Total active energy returned
+    - Unit: Wh
+
+36. c_fund_act_ret_energy
+    - Fundamental active returned energy
+    - Unit: Wh
+
+37. c_lag_react_energy
+    - Lagging reactive energy
+    - Unit: VARh
+
+38. c_lead_react_energy
+    - Leading reactive energy
+    - Unit: VARh
+
+39. c_max_act_power
+    - Maximum active power
+    - Unit: W
+
+40. c_min_act_power
+    - Minimum active power
+    - Unit: W
+
+41. c_max_aprt_power
+    - Maximum apparent power
+    - Unit: VA
+
+42. c_min_aprt_power
+    - Minimum apparent power
+    - Unit: VA
+
+43. c_max_voltage
+    - Maximum voltage
+    - Unit: V
+
+44. c_min_voltage
+    - Minimum voltage
+    - Unit: V
+
+45. c_avg_voltage
+    - Average voltage
+    - Unit: V
+
+46. c_max_current
+    - Maximum current
+    - Unit: A
+
+47. c_min_current
+    - Minimum current
+    - Unit: A
+
+48. c_avg_current
+    - Average current
+    - Unit: A
+
+
+NEUTRAL (3 parameters):
+-----------------------
+
+49. n_max_current
+    - Maximum neutral current
+    - Unit: A
+
+50. n_min_current
+    - Minimum neutral current
+    - Unit: A
+
+51. n_avg_current
+    - Average neutral current
+    - Unit: A
+
+
+HOW TO ACCESS:
+==============
+
+HTTP GET:
+http://YOUR_IP/rpc/EMData.GetData?id=0&ts=UNIX_TIMESTAMP
+
+Curl:
+curl -X POST -d '{"id":1,"method":"EMData.GetData","params":{"id":0,"ts":1656356400}}' http://YOUR_IP/rpc
+
+Alternative - Download as CSV:
+http://YOUR_IP/emdata/0/data.csv?add_keys=true
+
+Parameters:
+- id: Component ID (usually 0)
+- ts: UNIX timestamp of first record
+- end_ts: (optional) UNIX timestamp of last record
+- add_keys: (optional) Include column headers in response
+
+
+EXAMPLE RESPONSE:
+=================
+
+{
+  "keys": [
+    "a_total_act_energy",
+    "a_fund_act_energy",
+    ... (all 49 keys)
+  ],
+  "data": [
+    {
+      "ts": 1656356400,
+      "period": 60,
+      "values": [
+        [120.5, 119.8, 5.2, 5.0, ...],  // First minute
+        [125.3, 124.1, 4.8, 4.6, ...]   // Second minute
+      ]
+    }
+  ],
+  "next_record_ts": 1656357000
+}
+
+
+UNDERSTANDING THE DATA:
+=======================
+
+1. ENERGY VALUES (per minute):
+   - Total energy consumed/returned in that 60-second period
+   - Useful for: Creating energy consumption graphs
+   - Example: a_total_act_energy = 120 Wh in one minute
+
+2. MAX/MIN VALUES:
+   - Peak and valley measurements during each minute
+   - Useful for: Detecting spikes, monitoring stability
+   - Example: a_max_voltage = 245V, a_min_voltage = 235V
+
+3. AVERAGE VALUES:
+   - Mean value during the minute
+   - Useful for: Smoothed data, trending
+   - Example: a_avg_current = 12.5A
+
+4. FUNDAMENTAL vs TOTAL ENERGY:
+   - Total includes harmonics
+   - Fundamental excludes harmonics
+   - Difference indicates power quality issues
+
+
+USE CASES:
+==========
+
+1. Detailed Energy Analysis:
+   - Track consumption patterns throughout the day
+   - Identify peak usage times
+   - Analyze energy trends over weeks/months
+
+2. Power Quality Monitoring:
+   - Compare fundamental vs total energy
+   - Monitor voltage stability (max/min/avg)
+   - Detect power quality issues
+
+3. Load Profiling:
+   - Identify when appliances run
+   - Create load profiles for different times
+   - Optimize energy usage
+
+4. Solar Analysis:
+   - Track generation patterns
+   - Compare production to consumption
+   - Optimize solar usage
+
+5. Cost Analysis:
+   - Calculate costs by time of day
+   - Identify expensive usage periods
+   - Plan energy-saving strategies
+
+6. Anomaly Detection:
+   - Detect unusual consumption spikes
+   - Identify equipment malfunctions
+   - Monitor for energy theft
+
+7. Reactive Power Analysis:
+   - Monitor lagging/leading reactive energy
+   - Identify inductive/capacitive loads
+   - Improve power factor
+
+8. Neutral Current Analysis:
+   - Track load imbalances
+   - Monitor neutral conductor stress
+   - Detect wiring issues
+
+
+ACCESSING HISTORICAL DATA:
+==========================
+
+Get last 24 hours:
+------------------
+1. Calculate timestamp 24 hours ago
+2. Call EMData.GetData with ts = 24 hours ago
+3. Process minute-by-minute data
+
+Example:
+ts = current_time - (24 * 60 * 60)  // 24 hours ago
+http://YOUR_IP/rpc/EMData.GetData?id=0&ts=TS_VALUE
+
+
+Get specific time range:
+------------------------
+ts = start_timestamp
+end_ts = end_timestamp
+http://YOUR_IP/rpc/EMData.GetData?id=0&ts=TS_START&end_ts=TS_END
+
+
+Download as CSV:
+----------------
+http://YOUR_IP/emdata/0/data.csv?add_keys=true
+
+This downloads all available data as a CSV file that can be:
+- Opened in Excel
+- Imported into databases
+- Analyzed with Python/R
+- Used in BI tools
+
+
+WORKING WITH THE DATA:
+======================
+
+Python Example:
+---------------
+import requests
+from datetime import datetime, timedelta
+
+# Get data from last 24 hours
+ts = int((datetime.now() - timedelta(days=1)).timestamp())
+url = f"http://192.168.1.100/rpc/EMData.GetData?id=0&ts={ts}"
+response = requests.get(url).json()
+
+keys = response['keys']
+data = response['data'][0]['values']
+
+# Extract Phase A total energy for each minute
+phase_a_energy_index = keys.index('a_total_act_energy')
+phase_a_energies = [minute[phase_a_energy_index] for minute in data]
+
+# Calculate hourly consumption
+hourly = [sum(phase_a_energies[i:i+60]) for i in range(0, len(phase_a_energies), 60)]
+print(f"Hourly consumption: {hourly}")
+
+
+Excel Analysis:
+---------------
+1. Download CSV: http://YOUR_IP/emdata/0/data.csv?add_keys=true
+2. Open in Excel
+3. Create pivot tables
+4. Generate charts
+5. Analyze trends
+
+
+COMBINING WITH OTHER DATA:
+==========================
+
+Get both current and historical:
+
+1. EM.GetStatus - Current real-time measurements
+2. EMData.GetStatus - Perpetual counters
+3. EMData.GetData - Minute-by-minute history
+
+Use together for:
+- Real-time dashboard with historical context
+- Comparing current usage to historical patterns
+- Predicting future consumption based on history
+
+
+DATA LIMITATIONS:
+=================
+
+1. Storage: Maximum ~60 days of data
+2. Resolution: 1-minute intervals (can't see sub-minute changes)
+3. Size: Large datasets for long periods
+4. Response chunking: Very large requests split into multiple responses
+5. No real-time: Data saved periodically, not every second
+
+
+ALTERNATIVE: EMDATA.GETNETENERGIES
+===================================
+
+For net energy analysis (especially with solar):
+
+EMData.GetNetEnergies provides:
+- Net energy (consumed - returned) over periods
+- Available periods: 5, 15, 30, or 60 minutes
+- Simplified data structure
+- Better for solar analysis
+
+Example:
+http://YOUR_IP/rpc/EMData.GetNetEnergies?id=0&ts=TS&period=300
+
+Returns:
+{
+  "keys": ["a_net_act_energy", "b_net_act_energy", "c_net_act_energy"],
+  "data": [...]
+}
+
+
+SUMMARY:
+========
+
+EMData.GetData provides the most comprehensive historical data:
+✓ 49+ parameters per minute
+✓ Up to 60 days retention
+✓ Energy, power, voltage, current statistics
+✓ Max, min, and average values
+✓ Reactive energy data
+✓ Downloadable as CSV
+
+Use this when you need:
+- Detailed energy analysis
+- Historical trends
+- Power quality monitoring
+- Load profiling
+- Cost optimization
+- Anomaly detection

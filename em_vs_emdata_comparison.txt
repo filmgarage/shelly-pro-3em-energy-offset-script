@@ -1,0 +1,330 @@
+SHELLY PRO 3EM - EM vs EMDATA COMPARISON TABLE
+==============================================
+
+
+QUICK COMPARISON: EM vs EMData
+===============================
+
++------------------+-------------------------+---------------------------+
+| FEATURE          | EM.GetStatus            | EMData.GetStatus          |
++------------------+-------------------------+---------------------------+
+| Data Type        | Instantaneous           | Accumulated               |
+| Update Rate      | Real-time (very fast)   | Periodic                  |
+| Persistence      | No (lost on reboot)     | Yes (flash storage)       |
+| Use For          | Monitoring              | Billing/Tracking          |
+| Like a...        | Speedometer             | Odometer                  |
++------------------+-------------------------+---------------------------+
+
+
+AVAILABLE PARAMETERS COMPARISON
+================================
+
+PHASE A PARAMETERS:
++------------------------+-------------------------+---------------------------+
+| MEASUREMENT            | EM.GetStatus            | EMData.GetStatus          |
++------------------------+-------------------------+---------------------------+
+| Current                | a_current (A)           | Not available             |
+| Voltage                | a_voltage (V)           | Not available             |
+| Active Power           | a_act_power (W)         | Not available             |
+| Apparent Power         | a_aprt_power (VA)       | Not available             |
+| Power Factor           | a_pf                    | Not available             |
+| Frequency              | a_freq (Hz)             | Not available             |
+| Total Energy Consumed  | Not available           | a_total_act_energy (Wh)   |
+| Total Energy Returned  | Not available           | a_total_act_ret_energy    |
+| Errors                 | a_errors (array)        | Not available             |
++------------------------+-------------------------+---------------------------+
+
+PHASE B PARAMETERS:
++------------------------+-------------------------+---------------------------+
+| MEASUREMENT            | EM.GetStatus            | EMData.GetStatus          |
++------------------------+-------------------------+---------------------------+
+| Current                | b_current (A)           | Not available             |
+| Voltage                | b_voltage (V)           | Not available             |
+| Active Power           | b_act_power (W)         | Not available             |
+| Apparent Power         | b_aprt_power (VA)       | Not available             |
+| Power Factor           | b_pf                    | Not available             |
+| Frequency              | b_freq (Hz)             | Not available             |
+| Total Energy Consumed  | Not available           | b_total_act_energy (Wh)   |
+| Total Energy Returned  | Not available           | b_total_act_ret_energy    |
+| Errors                 | b_errors (array)        | Not available             |
++------------------------+-------------------------+---------------------------+
+
+PHASE C PARAMETERS:
++------------------------+-------------------------+---------------------------+
+| MEASUREMENT            | EM.GetStatus            | EMData.GetStatus          |
++------------------------+-------------------------+---------------------------+
+| Current                | c_current (A)           | Not available             |
+| Voltage                | c_voltage (V)           | Not available             |
+| Active Power           | c_act_power (W)         | Not available             |
+| Apparent Power         | c_aprt_power (VA)       | Not available             |
+| Power Factor           | c_pf                    | Not available             |
+| Frequency              | c_freq (Hz)             | Not available             |
+| Total Energy Consumed  | Not available           | c_total_act_energy (Wh)   |
+| Total Energy Returned  | Not available           | c_total_act_ret_energy    |
+| Errors                 | c_errors (array)        | Not available             |
++------------------------+-------------------------+---------------------------+
+
+NEUTRAL PARAMETERS:
++------------------------+-------------------------+---------------------------+
+| MEASUREMENT            | EM.GetStatus            | EMData.GetStatus          |
++------------------------+-------------------------+---------------------------+
+| Neutral Current        | n_current (A)           | Not available             |
+| Neutral Errors         | n_errors (array)        | Not available             |
++------------------------+-------------------------+---------------------------+
+
+TOTAL/COMBINED PARAMETERS:
++------------------------+-------------------------+---------------------------+
+| MEASUREMENT            | EM.GetStatus            | EMData.GetStatus          |
++------------------------+-------------------------+---------------------------+
+| Total Current          | total_current (A)       | Not available             |
+| Total Active Power     | total_act_power (W)     | Not available             |
+| Total Apparent Power   | total_aprt_power (VA)   | Not available             |
+| Total Energy Consumed  | Not available           | total_act (Wh)            |
+| Total Energy Returned  | Not available           | total_act_ret (Wh)        |
++------------------------+-------------------------+---------------------------+
+
+SYSTEM STATUS:
++------------------------+-------------------------+---------------------------+
+| MEASUREMENT            | EM.GetStatus            | EMData.GetStatus          |
++------------------------+-------------------------+---------------------------+
+| Component ID           | id                      | id                        |
+| System Errors          | errors (array)          | errors (array)            |
+| User Calibration       | user_calibrated_phase   | Not available             |
++------------------------+-------------------------+---------------------------+
+
+
+WHEN TO USE EACH:
+=================
+
+USE EM.GETSTATUS FOR:
+---------------------
+✓ Real-time power monitoring
+✓ Live dashboards
+✓ Current load analysis
+✓ Voltage monitoring
+✓ Power quality checks
+✓ Load balancing
+✓ Immediate alerts
+✓ Circuit protection
+✓ Appliance identification
+
+EXAMPLE: "My washing machine is currently using 1,200W"
+
+
+USE EMDATA.GETSTATUS FOR:
+--------------------------
+✓ Total consumption tracking
+✓ Monthly billing
+✓ Cost calculations
+✓ Long-term analysis
+✓ Solar generation totals
+✓ Grid vs solar comparison
+✓ Usage reports
+✓ Utility meter alignment
+✓ Energy audits
+
+EXAMPLE: "I've used 450 kWh this month"
+
+
+PRACTICAL EXAMPLES SIDE BY SIDE:
+=================================
+
+SCENARIO 1: Monitoring Power Usage
+-----------------------------------
+Real-time (EM.GetStatus):
+  "You are currently using 3,250W"
+  "Phase A: 1,200W, Phase B: 950W, Phase C: 1,100W"
+  Updates: Every second
+
+Accumulated (EMData.GetStatus):
+  "Total consumption today: 45 kWh"
+  "Phase A: 15 kWh, Phase B: 18 kWh, Phase C: 12 kWh"
+  Updates: Periodically
+
+
+SCENARIO 2: Cost Calculation
+-----------------------------
+Real-time (EM.GetStatus):
+  "At current usage (3.25 kW), you're spending $0.49/hour"
+  Calculation: 3.25 kW × $0.15/kWh = $0.49/hour
+
+Accumulated (EMData.GetStatus):
+  "This month: 450 kWh = $67.50"
+  Calculation: 450 kWh × $0.15/kWh = $67.50
+
+
+SCENARIO 3: Solar Monitoring
+-----------------------------
+Real-time (EM.GetStatus):
+  "Currently generating: -2,500W (negative = generation)"
+  "Net usage: 750W consumption - 2,500W generation = -1,750W to grid"
+
+Accumulated (EMData.GetStatus):
+  "Today's solar: 25 kWh generated"
+  "Today's consumption: 18 kWh"
+  "Net: 7 kWh exported to grid"
+
+
+SCENARIO 4: Appliance Detection
+--------------------------------
+Real-time (EM.GetStatus):
+  Monitor total_act_power:
+  - Before: 500W
+  - After: 2,500W
+  - Detected: 2,000W appliance turned on
+
+Accumulated (EMData.GetStatus):
+  Not suitable for appliance detection
+  Can only show: "Total increased by X kWh"
+
+
+SCENARIO 5: Load Balancing
+---------------------------
+Real-time (EM.GetStatus):
+  Phase A: 15A (high)
+  Phase B: 8A (low)
+  Phase C: 12A (medium)
+  Action: Move loads from A to B
+
+Accumulated (EMData.GetStatus):
+  Not suitable for load balancing
+  Shows only historical totals
+
+
+SCENARIO 6: Voltage Monitoring
+-------------------------------
+Real-time (EM.GetStatus):
+  Phase A: 238V (normal)
+  Phase B: 235V (slightly low)
+  Phase C: 242V (slightly high)
+  Alert: Voltage variation detected
+
+Accumulated (EMData.GetStatus):
+  Not available
+  No voltage data
+
+
+DATA STRUCTURE COMPARISON:
+==========================
+
+EM.GetStatus Response Example:
+-------------------------------
+{
+  "id": 0,
+  "a_current": 5.2,
+  "a_voltage": 238.5,
+  "a_act_power": 1240,
+  "a_aprt_power": 1242,
+  "a_pf": 0.998,
+  "a_freq": 50,
+  "b_current": 4.1,
+  "b_voltage": 239.1,
+  "b_act_power": 980,
+  ...
+  "total_act_power": 3220,
+  "total_aprt_power": 3228
+}
+
+Values: Instantaneous measurements
+Size: ~500 bytes
+Updated: Multiple times per second (internal)
+
+
+EMData.GetStatus Response Example:
+-----------------------------------
+{
+  "id": 0,
+  "a_total_act_energy": 125000,
+  "a_total_act_ret_energy": 5000,
+  "b_total_act_energy": 130000,
+  "b_total_act_ret_energy": 4500,
+  "c_total_act_energy": 120000,
+  "c_total_act_ret_energy": 5500,
+  "total_act": 375000,
+  "total_act_ret": 15000
+}
+
+Values: Accumulated counters (Wh)
+Size: ~200 bytes
+Updated: Periodically (saved to flash)
+
+
+COMBINING BOTH FOR MAXIMUM INSIGHT:
+====================================
+
+Use both together for complete picture:
+
+Dashboard Example:
+------------------
+Real-time Section (EM.GetStatus):
+  "Current Power: 3.2 kW"
+  "Phase A: 238V, 5.2A, 1.24 kW"
+  "Phase B: 239V, 4.1A, 0.98 kW"
+  "Phase C: 237V, 4.2A, 1.00 kW"
+
+Historical Section (EMData.GetStatus):
+  "Today: 45 kWh used"
+  "This Month: 450 kWh used"
+  "Cost: $67.50"
+
+
+Home Assistant Example:
+------------------------
+Sensors from EM.GetStatus:
+  - sensor.phase_a_power (W)
+  - sensor.phase_a_voltage (V)
+  - sensor.phase_a_current (A)
+  - sensor.total_power (W)
+
+Sensors from EMData.GetStatus:
+  - sensor.phase_a_total_energy (kWh)
+  - sensor.total_energy (kWh)
+  - sensor.solar_generated (kWh)
+
+
+API CALL COMPARISON:
+====================
+
+EM.GetStatus:
+-------------
+URL: http://192.168.1.100/rpc/EM.GetStatus?id=0
+Speed: Very fast (<10ms)
+Data: Real-time measurements
+Size: ~500 bytes
+
+EMData.GetStatus:
+-----------------
+URL: http://192.168.1.100/rpc/EMData.GetStatus?id=0
+Speed: Fast (<20ms)
+Data: Accumulated counters
+Size: ~200 bytes
+
+
+SCRIPT USAGE:
+=============
+
+Current Script Uses:
+→ EMData.GetStatus only
+→ Reason: Tracking accumulated energy with offsets
+
+Could be modified to use:
+→ EM.GetStatus for real-time power display
+→ EMData.GetStatus for accumulated energy display
+→ Both for comprehensive monitoring
+
+
+SUMMARY:
+========
+
+Think of them as complementary:
+- EM.GetStatus = What's happening RIGHT NOW
+- EMData.GetStatus = What has happened SO FAR
+
+Use EM for:
+  Monitoring, alerts, analysis, quality
+
+Use EMData for:
+  Billing, tracking, totals, history
+
+Use BOTH for:
+  Complete energy management system

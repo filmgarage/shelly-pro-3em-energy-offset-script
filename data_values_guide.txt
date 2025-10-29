@@ -1,0 +1,295 @@
+SHELLY PRO 3EM - DATA VALUES QUICK REFERENCE GUIDE
+==================================================
+
+This guide helps you understand which data values to use for different purposes.
+
+
+QUICK COMPARISON: EM vs EMData
+===============================
+
+EM Component (Real-time):
+- Instantaneous measurements
+- Updates continuously (very fast)
+- Current, Voltage, Power, Power Factor, Frequency
+- Use for: Monitoring current usage, load balancing, live dashboards
+
+EMData Component (Accumulated):
+- Perpetual energy counters
+- Updates periodically
+- Total energy consumed and returned
+- Use for: Billing, long-term tracking, consumption analysis
+
+
+WHAT TO USE FOR COMMON TASKS:
+==============================
+
+1. BILLING / CONSUMPTION TRACKING
+   Use: EMData.GetStatus
+   Values: a_total_act_energy, b_total_act_energy, c_total_act_energy, total_act
+   Why: These are perpetual counters like a utility meter
+   Example: Track monthly kWh for billing
+
+2. LIVE POWER MONITORING
+   Use: EM.GetStatus
+   Values: a_act_power, b_act_power, c_act_power, total_act_power
+   Why: Shows current power draw in real-time
+   Example: See current appliance load
+
+3. SOLAR GENERATION TRACKING
+   Use: EMData.GetStatus
+   Values: a_total_act_ret_energy, b_total_act_ret_energy, total_act_ret
+   Why: Tracks energy returned to grid
+   Example: Monitor total solar production
+
+4. LOAD BALANCING BETWEEN PHASES
+   Use: EM.GetStatus
+   Values: a_current, b_current, c_current
+   Why: Shows current distribution across phases
+   Example: Balance loads to prevent phase overload
+
+5. POWER QUALITY MONITORING
+   Use: EM.GetStatus
+   Values: a_voltage, a_freq, a_pf (and B, C equivalents)
+   Why: Monitors grid stability and power quality
+   Example: Detect voltage drops or frequency issues
+
+6. APPLIANCE POWER CONSUMPTION
+   Use: EM.GetStatus
+   Values: total_act_power
+   Why: Instantaneous power draw
+   Example: Measure how much power your washing machine uses
+
+7. NET ENERGY CALCULATION (WITH SOLAR)
+   Use: EMData.GetStatus
+   Values: total_act - total_act_ret
+   Why: Shows net consumption after solar generation
+   Example: Calculate actual grid consumption
+
+8. COST CALCULATION
+   Use: EMData.GetStatus
+   Values: total_act (in Wh, divide by 1000 for kWh)
+   Why: Multiply by electricity rate
+   Example: total_act / 1000 * $0.15 per kWh
+
+9. CIRCUIT OVERLOAD DETECTION
+   Use: EM.GetStatus
+   Values: a_current, b_current, c_current, a_errors, b_errors, c_errors
+   Why: Real-time current with error detection
+   Example: Alert when current exceeds safe limits
+
+10. NEUTRAL CURRENT MONITORING
+    Use: EM.GetStatus
+    Values: n_current
+    Why: Detect imbalanced loads
+    Example: High neutral current = load imbalance
+
+
+DATA VALUE CATEGORIES:
+======================
+
+INSTANTANEOUS MEASUREMENTS (EM.GetStatus):
+-------------------------------------------
+✓ Current (A)         - a_current, b_current, c_current, n_current, total_current
+✓ Voltage (V)         - a_voltage, b_voltage, c_voltage
+✓ Active Power (W)    - a_act_power, b_act_power, c_act_power, total_act_power
+✓ Apparent Power (VA) - a_aprt_power, b_aprt_power, c_aprt_power, total_aprt_power
+✓ Power Factor        - a_pf, b_pf, c_pf
+✓ Frequency (Hz)      - a_freq, b_freq, c_freq
+
+
+ACCUMULATED ENERGY (EMData.GetStatus):
+---------------------------------------
+✓ Consumed Energy (Wh)  - a_total_act_energy, b_total_act_energy, c_total_act_energy, total_act
+✓ Returned Energy (Wh)  - a_total_act_ret_energy, b_total_act_ret_energy, c_total_act_ret_energy, total_act_ret
+
+
+UNDERSTANDING THE DIFFERENCE:
+==============================
+
+Think of it like a car:
+
+EM.GetStatus = Speedometer
+- Shows current speed (power)
+- Updates constantly
+- Changes immediately when you accelerate/brake
+
+EMData.GetStatus = Odometer
+- Shows total distance traveled (energy)
+- Only increases
+- Doesn't change with speed, only accumulates
+
+
+UNIT CONVERSIONS:
+=================
+
+Wh to kWh:
+  kWh = Wh / 1000
+  Example: 15234 Wh = 15.234 kWh
+
+W to kW:
+  kW = W / 1000
+  Example: 2500 W = 2.5 kW
+
+VA to kVA:
+  kVA = VA / 1000
+  Example: 3000 VA = 3 kVA
+
+
+PRACTICAL EXAMPLES:
+===================
+
+Example 1: Monthly Energy Bill
+-------------------------------
+Goal: Calculate last month's consumption
+
+1. Read EMData at start of month: total_act = 5000 Wh
+2. Read EMData at end of month: total_act = 500000 Wh
+3. Calculate: 500000 - 5000 = 495000 Wh = 495 kWh
+4. Cost: 495 kWh × $0.15 = $74.25
+
+Better approach: Use the offset script!
+- Set offset to your utility meter reading at month start
+- Virtual component shows aligned value throughout month
+
+
+Example 2: Real-time Power Dashboard
+-------------------------------------
+Goal: Display current power usage
+
+Read EM.GetStatus every second:
+- Phase A: a_act_power = 1200 W
+- Phase B: b_act_power = 850 W
+- Phase C: c_act_power = 950 W
+- Total: total_act_power = 3000 W (3 kW)
+
+Display: "Currently using 3.0 kW"
+
+
+Example 3: Solar Production Tracking
+-------------------------------------
+Goal: Track daily solar generation
+
+Morning (6 AM):
+- Read EMData: total_act_ret = 10000 Wh
+
+Evening (6 PM):
+- Read EMData: total_act_ret = 25000 Wh
+
+Daily production: 25000 - 10000 = 15000 Wh = 15 kWh
+
+Better: Use returned energy offset to start from zero each day
+
+
+Example 4: Detect Heavy Appliance Usage
+----------------------------------------
+Goal: Alert when power exceeds 5 kW
+
+Monitor EM.GetStatus:
+- Check: total_act_power > 5000
+- If true: Send notification
+- Update frequency: Every 5 seconds
+
+
+Example 5: Phase Load Balancing
+--------------------------------
+Goal: Ensure phases are evenly loaded
+
+Read EM.GetStatus:
+- Phase A: a_current = 15 A
+- Phase B: b_current = 8 A
+- Phase C: c_current = 12 A
+
+Analysis: Phase A is overloaded, move some loads to Phase B
+
+
+MODIFYING THE SCRIPT:
+=====================
+
+To use different data values in the script:
+
+1. For Real-time Power:
+   Change: Shelly.call("EM.GetStatus", ...)
+   Use: result.a_act_power, result.b_act_power, etc.
+
+2. For Current:
+   Change: Shelly.call("EM.GetStatus", ...)
+   Use: result.a_current, result.b_current, etc.
+
+3. For Voltage:
+   Change: Shelly.call("EM.GetStatus", ...)
+   Use: result.a_voltage, result.b_voltage, etc.
+
+4. Current script uses:
+   Shelly.call("EMData.GetStatus", ...)
+   Uses: result.a_total_act_energy, etc.
+
+
+CHOOSING BETWEEN EM AND EMDATA:
+================================
+
+Use EM.GetStatus when you need:
+✓ Real-time monitoring
+✓ Current power consumption
+✓ Live dashboard updates
+✓ Immediate response to changes
+✓ Power quality data
+✓ Load management
+
+Use EMData.GetStatus when you need:
+✓ Total consumption over time
+✓ Billing information
+✓ Long-term tracking
+✓ Energy cost calculation
+✓ Comparison with utility meter
+✓ Solar production totals
+
+
+DATA PERSISTENCE:
+=================
+
+EM.GetStatus data:
+- Not stored permanently
+- Lost on power cycle
+- Resets to current measurements
+- No historical data
+
+EMData.GetStatus data:
+- Stored in flash memory
+- Survives power cycles
+- Never resets automatically
+- Historical data retained (60 days)
+
+
+API CALL EXAMPLES:
+==================
+
+Get Real-time Data:
+http://192.168.x.x/rpc/EM.GetStatus?id=0
+
+Get Accumulated Energy:
+http://192.168.x.x/rpc/EMData.GetStatus?id=0
+
+Both in one script:
+Shelly.call("EM.GetStatus", {id: 0}, function(em_result) {
+  Shelly.call("EMData.GetStatus", {id: 0}, function(emdata_result) {
+    // Now you have both real-time and accumulated data
+    let current_power = em_result.total_act_power;
+    let total_energy = emdata_result.total_act;
+  });
+});
+
+
+ADDITIONAL RESOURCES:
+=====================
+
+Full API Documentation:
+- EM Component: https://shelly-api-docs.shelly.cloud/gen2/ComponentsAndServices/EM
+- EMData Component: https://shelly-api-docs.shelly.cloud/gen2/ComponentsAndServices/EMData
+
+Device Documentation:
+- Shelly Pro 3EM: https://shelly-api-docs.shelly.cloud/gen2/Devices/ShellyPro3EM
+
+Script Files:
+- current_script_data_values.txt - What the current script uses
+- all_realtime_data_values.txt - Complete EM.GetStatus reference
+- all_accumulated_energy_data.txt - Complete EMData.GetStatus reference

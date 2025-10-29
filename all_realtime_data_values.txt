@@ -1,0 +1,294 @@
+SHELLY PRO 3EM - ALL AVAILABLE REAL-TIME DATA (EM COMPONENT)
+============================================================
+
+Component: EM (Energy Meter)
+API Call: EM.GetStatus (ID: 0)
+Update Rate: Real-time measurements
+
+These are instantaneous measurements updated in real-time.
+
+
+PHASE A DATA:
+-------------
+
+a_current
+  - Description: Phase A current measurement
+  - Unit: A (Amperes)
+  - Type: Number or null
+  - Example: 4.029
+
+a_voltage
+  - Description: Phase A voltage measurement
+  - Unit: V (Volts)
+  - Type: Number or null
+  - Example: 236.1
+
+a_act_power
+  - Description: Phase A active power measurement
+  - Unit: W (Watts)
+  - Type: Number or null
+  - Example: 951.2
+  - Note: Can be negative (returned/generated power)
+
+a_aprt_power
+  - Description: Phase A apparent power measurement
+  - Unit: VA (Volt-Ampere)
+  - Type: Number or null
+  - Example: 951.9
+
+a_pf
+  - Description: Phase A power factor
+  - Unit: Dimensionless (0 to 1)
+  - Type: Number or null
+  - Example: 1
+  - Note: 1 = perfect power factor, closer to 0 = poor
+
+a_freq
+  - Description: Phase A network frequency
+  - Unit: Hz (Hertz)
+  - Type: Number or null
+  - Example: 50
+
+a_errors
+  - Description: Phase A error conditions
+  - Type: Array of strings
+  - Possible values:
+    * "out_of_range:active_power"
+    * "out_of_range:apparent_power"
+    * "out_of_range:voltage"
+    * "out_of_range:current"
+  - Only present if errors exist
+
+
+PHASE B DATA:
+-------------
+
+b_current
+  - Description: Phase B current measurement
+  - Unit: A (Amperes)
+  - Type: Number or null
+  - Example: 4.027
+
+b_voltage
+  - Description: Phase B voltage measurement
+  - Unit: V (Volts)
+  - Type: Number or null
+  - Example: 236.201
+
+b_act_power
+  - Description: Phase B active power measurement
+  - Unit: W (Watts)
+  - Type: Number or null
+  - Example: -951.1
+  - Note: Can be negative (returned/generated power)
+
+b_aprt_power
+  - Description: Phase B apparent power measurement
+  - Unit: VA (Volt-Ampere)
+  - Type: Number or null
+  - Example: 951.8
+
+b_pf
+  - Description: Phase B power factor
+  - Unit: Dimensionless (0 to 1)
+  - Type: Number or null
+  - Example: 1
+
+b_freq
+  - Description: Phase B network frequency
+  - Unit: Hz (Hertz)
+  - Type: Number or null
+  - Example: 50
+
+b_errors
+  - Description: Phase B error conditions
+  - Type: Array of strings
+  - Possible values:
+    * "out_of_range:active_power"
+    * "out_of_range:apparent_power"
+    * "out_of_range:voltage"
+    * "out_of_range:current"
+  - Only present if errors exist
+
+
+PHASE C DATA:
+-------------
+
+c_current
+  - Description: Phase C current measurement
+  - Unit: A (Amperes)
+  - Type: Number or null
+  - Example: 3.03
+
+c_voltage
+  - Description: Phase C voltage measurement
+  - Unit: V (Volts)
+  - Type: Number or null
+  - Example: 236.402
+
+c_act_power
+  - Description: Phase C active power measurement
+  - Unit: W (Watts)
+  - Type: Number or null
+  - Example: 715.4
+  - Note: Can be negative (returned/generated power)
+
+c_aprt_power
+  - Description: Phase C apparent power measurement
+  - Unit: VA (Volt-Ampere)
+  - Type: Number or null
+  - Example: 716.2
+
+c_pf
+  - Description: Phase C power factor
+  - Unit: Dimensionless (0 to 1)
+  - Type: Number or null
+  - Example: 1
+
+c_freq
+  - Description: Phase C network frequency
+  - Unit: Hz (Hertz)
+  - Type: Number or null
+  - Example: 50
+
+c_errors
+  - Description: Phase C error conditions
+  - Type: Array of strings
+  - Possible values:
+    * "out_of_range:active_power"
+    * "out_of_range:apparent_power"
+    * "out_of_range:voltage"
+    * "out_of_range:current"
+  - Only present if errors exist
+
+
+NEUTRAL DATA:
+-------------
+
+n_current
+  - Description: Neutral current measurement
+  - Unit: A (Amperes)
+  - Type: Number or null
+  - Example: 11.029
+  - Note: Only available if neutral CT is connected
+
+n_errors
+  - Description: Neutral error conditions
+  - Type: Array of strings
+  - Possible values:
+    * "out_of_range:current"
+  - Only present if error exists
+
+
+TOTAL / COMBINED DATA:
+----------------------
+
+total_current
+  - Description: Sum of current on all phases (excluding neutral)
+  - Unit: A (Amperes)
+  - Type: Number or null
+  - Example: 11.083
+  - Calculation: Sum of available phase currents
+
+total_act_power
+  - Description: Sum of active power on all phases
+  - Unit: W (Watts)
+  - Type: Number or null
+  - Example: 2484.782
+  - Calculation: Sum of all phase active powers
+  - Note: Can be negative if more power is returned than consumed
+
+total_aprt_power
+  - Description: Sum of apparent power on all phases
+  - Unit: VA (Volt-Ampere)
+  - Type: Number or null
+  - Example: 2486.7
+  - Calculation: Sum of all phase apparent powers
+
+
+SYSTEM STATUS:
+--------------
+
+id
+  - Description: Component ID
+  - Type: Number
+  - Example: 0
+
+user_calibrated_phase
+  - Description: List of phases that have been user-calibrated
+  - Type: Array of strings
+  - Possible values: ["a"], ["b"], ["c"], ["a","b"], etc.
+  - Example: []
+
+errors
+  - Description: System-level error conditions
+  - Type: Array of strings
+  - Possible values:
+    * "power_meter_failure" - Hardware failure
+    * "phase_sequence" - Incorrect phase sequence (A-C-B instead of A-B-C)
+    * "ct_type_not_set" - Current transformer type not configured
+  - Only present if not empty
+  - Example: ["phase_sequence"]
+
+
+EXAMPLE JSON RESPONSE:
+---------------------
+
+{
+  "id": 0,
+  "a_current": 4.029,
+  "a_voltage": 236.1,
+  "a_act_power": 951.2,
+  "a_aprt_power": 951.9,
+  "a_pf": 1,
+  "a_freq": 50,
+  "b_current": 4.027,
+  "b_voltage": 236.201,
+  "b_act_power": -951.1,
+  "b_aprt_power": 951.8,
+  "b_pf": 1,
+  "b_freq": 50,
+  "c_current": 3.03,
+  "c_voltage": 236.402,
+  "c_act_power": 715.4,
+  "c_aprt_power": 716.2,
+  "c_pf": 1,
+  "c_freq": 50,
+  "n_current": 11.029,
+  "total_current": 11.083,
+  "total_act_power": 2484.782,
+  "total_aprt_power": 2486.7,
+  "user_calibrated_phase": [],
+  "errors": ["phase_sequence"]
+}
+
+
+HOW TO ACCESS:
+--------------
+
+HTTP GET:
+  http://YOUR_SHELLY_IP/rpc/EM.GetStatus?id=0
+
+Curl:
+  curl -X POST -d '{"id":1,"method":"EM.GetStatus","params":{"id":0}}' http://YOUR_SHELLY_IP/rpc
+
+From script:
+  Shelly.call("EM.GetStatus", { id: 0 }, function(result, error_code, error_message) {
+    if (error_code === 0) {
+      let current = result.a_current;
+      let voltage = result.a_voltage;
+      let power = result.a_act_power;
+      // etc.
+    }
+  });
+
+
+NOTES:
+------
+
+1. All measurements are real-time/instantaneous values
+2. Negative power values indicate returned/generated power (e.g., solar)
+3. Values can be null if sensor is not available or disconnected
+4. Update rate is very fast (multiple times per second internally)
+5. These values are NOT accumulated/summed over time
+6. For accumulated energy, use EMData.GetStatus instead

@@ -1,0 +1,207 @@
+SHELLY PRO 3EM - ALL ACCUMULATED ENERGY DATA (EMDATA COMPONENT)
+===============================================================
+
+Component: EMData (Energy Meter Data)
+API Call: EMData.GetStatus (ID: 0)
+Update Rate: Saved to flash periodically
+
+These are perpetual counters that accumulate energy over time.
+Values persist through power cycles and device restarts.
+
+
+PHASE A ACCUMULATED ENERGY:
+---------------------------
+
+a_total_act_energy
+  - Description: Phase A total accumulated active energy (consumed)
+  - Unit: Wh (Watt-hours)
+  - Type: Number
+  - Example: 15234.5
+  - Note: This is the main energy consumption counter for Phase A
+  - Resets: Only via EMData.ResetCounters or EMData.DeleteAllData
+
+a_total_act_ret_energy
+  - Description: Phase A total accumulated active returned energy (generated/returned)
+  - Unit: Wh (Watt-hours)
+  - Type: Number
+  - Example: 2500.3
+  - Note: Counts energy fed back into the grid (e.g., from solar panels)
+  - Resets: Only via EMData.ResetCounters or EMData.DeleteAllData
+
+
+PHASE B ACCUMULATED ENERGY:
+---------------------------
+
+b_total_act_energy
+  - Description: Phase B total accumulated active energy (consumed)
+  - Unit: Wh (Watt-hours)
+  - Type: Number
+  - Example: 16820.2
+  - Note: This is the main energy consumption counter for Phase B
+  - Resets: Only via EMData.ResetCounters or EMData.DeleteAllData
+
+b_total_act_ret_energy
+  - Description: Phase B total accumulated active returned energy (generated/returned)
+  - Unit: Wh (Watt-hours)
+  - Type: Number
+  - Example: 1800.7
+  - Note: Counts energy fed back into the grid
+  - Resets: Only via EMData.ResetCounters or EMData.DeleteAllData
+
+
+PHASE C ACCUMULATED ENERGY:
+---------------------------
+
+c_total_act_energy
+  - Description: Phase C total accumulated active energy (consumed)
+  - Unit: Wh (Watt-hours)
+  - Type: Number
+  - Example: 14567.8
+  - Note: This is the main energy consumption counter for Phase C
+  - Resets: Only via EMData.ResetCounters or EMData.DeleteAllData
+
+c_total_act_ret_energy
+  - Description: Phase C total accumulated active returned energy (generated/returned)
+  - Unit: Wh (Watt-hours)
+  - Type: Number
+  - Example: 3200.1
+  - Note: Counts energy fed back into the grid
+  - Resets: Only via EMData.ResetCounters or EMData.DeleteAllData
+
+
+TOTAL ACCUMULATED ENERGY:
+-------------------------
+
+total_act
+  - Description: Total accumulated active energy for all phases (consumed)
+  - Unit: Wh (Watt-hours)
+  - Type: Number
+  - Example: 46622.5
+  - Calculation: Sum of a_total_act_energy + b_total_act_energy + c_total_act_energy
+  - Note: This is the main total consumption counter
+  - Resets: Only via EMData.ResetCounters or EMData.DeleteAllData
+
+total_act_ret
+  - Description: Total accumulated active returned energy for all phases (generated)
+  - Unit: Wh (Watt-hours)
+  - Type: Number
+  - Example: 7501.1
+  - Calculation: Sum of a_total_act_ret_energy + b_total_act_ret_energy + c_total_act_ret_energy
+  - Note: Total energy fed back into the grid
+  - Resets: Only via EMData.ResetCounters or EMData.DeleteAllData
+
+
+SYSTEM STATUS:
+--------------
+
+id
+  - Description: Component ID
+  - Type: Number
+  - Example: 0
+
+errors
+  - Description: Error conditions
+  - Type: Array of strings
+  - Possible values:
+    * "no_load" - Device is in no-load condition (below 30 VA per phase)
+  - Only present if not empty
+
+
+EXAMPLE JSON RESPONSE:
+---------------------
+
+{
+  "id": 0,
+  "a_total_act_energy": 15234.5,
+  "a_total_act_ret_energy": 2500.3,
+  "b_total_act_energy": 16820.2,
+  "b_total_act_ret_energy": 1800.7,
+  "c_total_act_energy": 14567.8,
+  "c_total_act_ret_energy": 3200.1,
+  "total_act": 46622.5,
+  "total_act_ret": 7501.1
+}
+
+
+HOW TO ACCESS:
+--------------
+
+HTTP GET:
+  http://YOUR_SHELLY_IP/rpc/EMData.GetStatus?id=0
+
+Curl:
+  curl -X POST -d '{"id":1,"method":"EMData.GetStatus","params":{"id":0}}' http://YOUR_SHELLY_IP/rpc
+
+From script:
+  Shelly.call("EMData.GetStatus", { id: 0 }, function(result, error_code, error_message) {
+    if (error_code === 0) {
+      let phaseA_energy = result.a_total_act_energy;
+      let phaseB_energy = result.b_total_act_energy;
+      let phaseC_energy = result.c_total_act_energy;
+      let total_energy = result.total_act;
+      // etc.
+    }
+  });
+
+
+UNDERSTANDING RETURNED ENERGY:
+------------------------------
+
+The "_ret_energy" counters track energy flowing in the opposite direction:
+
+Example scenarios:
+1. Solar Panel System:
+   - During day: a_total_act_ret_energy increases (solar generating)
+   - During night: a_total_act_energy increases (consuming from grid)
+   - Net consumption = a_total_act_energy - a_total_act_ret_energy
+
+2. Grid-tied Battery:
+   - Charging: a_total_act_energy increases
+   - Discharging to grid: a_total_act_ret_energy increases
+
+3. Normal Consumption (no generation):
+   - Only a_total_act_energy increases
+   - a_total_act_ret_energy stays at 0
+
+
+HOW TO RESET COUNTERS:
+----------------------
+
+Reset all energy counters to zero:
+
+HTTP:
+  http://YOUR_SHELLY_IP/rpc/EMData.ResetCounters?id=0
+
+Curl:
+  curl -X POST -d '{"id":1,"method":"EMData.ResetCounters","params":{"id":0}}' http://YOUR_SHELLY_IP/rpc
+
+WARNING: This permanently resets all accumulated energy values to 0!
+
+
+DELETE ALL DATA (INCLUDING HISTORY):
+------------------------------------
+
+Delete all stored data and reset counters:
+
+HTTP:
+  http://YOUR_SHELLY_IP/rpc/EMData.DeleteAllData?id=0
+
+Curl:
+  curl -X POST -d '{"id":1,"method":"EMData.DeleteAllData","params":{"id":0}}' http://YOUR_SHELLY_IP/rpc
+
+WARNING: This deletes ALL historical data and resets counters!
+
+
+NOTES:
+------
+
+1. These values are perpetual counters (never reset automatically)
+2. Values persist through power cycles and reboots
+3. Stored in non-volatile memory (flash)
+4. Updated/saved periodically (not every second)
+5. Use these for billing, consumption tracking, and energy monitoring
+6. For real-time power consumption, use EM.GetStatus instead
+7. No load threshold: Energy accumulation stops below 30 VA per phase
+8. Values are in Wh - divide by 1000 to get kWh
+9. Historical data (minute-by-minute) available via EMData.GetData
+10. Data retention: Up to 60 days of minute-interval data

@@ -1,0 +1,309 @@
+SHELLY PRO 3EM - DATA DOCUMENTATION INDEX
+=========================================
+
+This index helps you find the information you need quickly.
+
+
+OVERVIEW OF FILES:
+==================
+
+1. current_script_data_values.txt
+   - What the script currently uses
+   - 4 energy values from EMData
+   - How the script processes them
+
+2. all_realtime_data_values.txt
+   - Complete reference for EM.GetStatus
+   - All real-time measurements
+   - Current, voltage, power, frequency, power factor
+   - 20+ parameters
+
+3. all_accumulated_energy_data.txt
+   - Complete reference for EMData.GetStatus
+   - Perpetual energy counters
+   - Consumed and returned energy per phase
+   - 8 parameters
+
+4. historical_detailed_data.txt
+   - Complete reference for EMData.GetData
+   - Minute-by-minute historical data
+   - 49+ parameters per minute
+   - Up to 60 days retention
+
+5. data_values_guide.txt
+   - Quick reference guide
+   - Which data to use for what purpose
+   - Practical examples
+   - Choosing between EM and EMData
+
+6. THIS FILE (index.txt)
+   - Navigation guide
+   - Quick lookups
+   - File summaries
+
+
+QUICK LOOKUP BY NEED:
+======================
+
+I want to track total energy consumption:
+→ See: all_accumulated_energy_data.txt
+→ Use: EMData.GetStatus
+→ Values: a_total_act_energy, b_total_act_energy, c_total_act_energy, total_act
+
+I want to see current power usage:
+→ See: all_realtime_data_values.txt
+→ Use: EM.GetStatus
+→ Values: a_act_power, b_act_power, c_act_power, total_act_power
+
+I want to monitor voltage:
+→ See: all_realtime_data_values.txt
+→ Use: EM.GetStatus
+→ Values: a_voltage, b_voltage, c_voltage
+
+I want to track solar generation:
+→ See: all_accumulated_energy_data.txt
+→ Use: EMData.GetStatus
+→ Values: a_total_act_ret_energy, b_total_act_ret_energy, total_act_ret
+
+I want to analyze historical patterns:
+→ See: historical_detailed_data.txt
+→ Use: EMData.GetData
+→ Returns: Minute-by-minute data for 60 days
+
+I want to understand what data to use:
+→ See: data_values_guide.txt
+→ Contains: Comparisons, examples, decision guide
+
+I want to modify the script:
+→ See: current_script_data_values.txt
+→ Then: all_realtime_data_values.txt OR all_accumulated_energy_data.txt
+→ Based on: What data you want to display
+
+
+DATA TYPES SUMMARY:
+===================
+
+REAL-TIME DATA (EM Component):
+-------------------------------
+Source: EM.GetStatus
+Update Rate: Continuous (very fast)
+Persistence: No (lost on power cycle)
+Best For: Live monitoring, dashboards, immediate feedback
+
+Available Values:
+✓ Current (A): a_current, b_current, c_current, n_current, total_current
+✓ Voltage (V): a_voltage, b_voltage, c_voltage
+✓ Active Power (W): a_act_power, b_act_power, c_act_power, total_act_power
+✓ Apparent Power (VA): a_aprt_power, b_aprt_power, c_aprt_power, total_aprt_power
+✓ Power Factor: a_pf, b_pf, c_pf
+✓ Frequency (Hz): a_freq, b_freq, c_freq
+
+Full details: all_realtime_data_values.txt
+
+
+ACCUMULATED DATA (EMData Component):
+-------------------------------------
+Source: EMData.GetStatus
+Update Rate: Periodic
+Persistence: Yes (survives power cycles)
+Best For: Billing, long-term tracking, consumption totals
+
+Available Values:
+✓ Consumed Energy (Wh): a_total_act_energy, b_total_act_energy, c_total_act_energy, total_act
+✓ Returned Energy (Wh): a_total_act_ret_energy, b_total_act_ret_energy, c_total_act_ret_energy, total_act_ret
+
+Full details: all_accumulated_energy_data.txt
+
+
+HISTORICAL DATA (EMData Component):
+------------------------------------
+Source: EMData.GetData
+Update Rate: 1-minute intervals
+Persistence: Up to 60 days
+Best For: Analysis, trending, power quality monitoring
+
+Available Values:
+✓ Energy per minute (Wh)
+✓ Max/Min/Avg Power (W, VA)
+✓ Max/Min/Avg Voltage (V)
+✓ Max/Min/Avg Current (A)
+✓ Reactive Energy (VARh)
+✓ 49+ parameters total
+
+Full details: historical_detailed_data.txt
+
+
+API ENDPOINTS QUICK REFERENCE:
+===============================
+
+Real-time Data:
+http://YOUR_IP/rpc/EM.GetStatus?id=0
+
+Accumulated Energy:
+http://YOUR_IP/rpc/EMData.GetStatus?id=0
+
+Historical Data:
+http://YOUR_IP/rpc/EMData.GetData?id=0&ts=TIMESTAMP
+
+Historical CSV Download:
+http://YOUR_IP/emdata/0/data.csv?add_keys=true
+
+Reset Energy Counters:
+http://YOUR_IP/rpc/EMData.ResetCounters?id=0
+
+Delete All Data:
+http://YOUR_IP/rpc/EMData.DeleteAllData?id=0
+
+
+SCRIPT MODIFICATION GUIDE:
+==========================
+
+Current Script Uses:
+→ EMData.GetStatus (accumulated energy)
+→ See: current_script_data_values.txt
+
+To Switch to Real-time Power:
+1. Read: all_realtime_data_values.txt
+2. Change API call from EMData.GetStatus to EM.GetStatus
+3. Change values from energy to power
+   Example: result.a_total_act_energy → result.a_act_power
+4. Change display units from kWh to kW
+
+To Add More Values:
+1. Identify what you need in data_values_guide.txt
+2. Find the parameter in appropriate file
+3. Add to script's data retrieval
+4. Create additional virtual components
+5. Update display logic
+
+To Display Historical Charts:
+1. Read: historical_detailed_data.txt
+2. Use EMData.GetData to retrieve history
+3. Process minute-by-minute arrays
+4. Create visualization (requires external tool)
+
+
+COMMON QUESTIONS:
+=================
+
+Q: What's the difference between EM and EMData?
+A: EM = real-time measurements, EMData = accumulated energy over time
+   Details: data_values_guide.txt
+
+Q: Which values should I use for billing?
+A: EMData.GetStatus - accumulated energy values
+   Details: all_accumulated_energy_data.txt
+
+Q: How do I monitor current power usage?
+A: EM.GetStatus - active power values
+   Details: all_realtime_data_values.txt
+
+Q: Can I get historical data?
+A: Yes, EMData.GetData provides 60 days of minute-by-minute data
+   Details: historical_detailed_data.txt
+
+Q: What does the script currently use?
+A: EMData accumulated energy (4 values)
+   Details: current_script_data_values.txt
+
+Q: How do I choose what data to use?
+A: See the decision guide and examples
+   Details: data_values_guide.txt
+
+Q: Can I track solar generation?
+A: Yes, use returned energy values
+   Details: all_accumulated_energy_data.txt
+
+Q: What's power factor and why does it matter?
+A: See the real-time data documentation
+   Details: all_realtime_data_values.txt
+
+
+FILE READING ORDER:
+===================
+
+For Beginners:
+1. Start with: data_values_guide.txt (overview and examples)
+2. Then read: current_script_data_values.txt (what script does)
+3. Then read: all_accumulated_energy_data.txt (energy tracking)
+4. If needed: all_realtime_data_values.txt (live monitoring)
+
+For Script Modification:
+1. Start with: current_script_data_values.txt
+2. Decide what you want: data_values_guide.txt
+3. Find the values: all_realtime_data_values.txt OR all_accumulated_energy_data.txt
+4. If needed: historical_detailed_data.txt
+
+For Data Analysis:
+1. Start with: data_values_guide.txt
+2. Understand basics: all_accumulated_energy_data.txt
+3. Advanced analysis: historical_detailed_data.txt
+4. Implementation: Use examples in guide
+
+For Troubleshooting:
+1. Check what script uses: current_script_data_values.txt
+2. Verify values exist: all_realtime_data_values.txt or all_accumulated_energy_data.txt
+3. Check decision guide: data_values_guide.txt
+
+
+PARAMETER COUNT SUMMARY:
+========================
+
+EM.GetStatus (Real-time):
+- 20+ parameters
+- Per phase: 7 parameters (A, B, C)
+- Neutral: 1 parameter
+- Totals: 2 parameters
+- System: errors, calibration status
+
+EMData.GetStatus (Accumulated):
+- 8 parameters
+- Per phase: 2 parameters (consumed, returned)
+- Totals: 2 parameters
+
+EMData.GetData (Historical):
+- 49+ parameters per minute
+- Per phase: 16 parameters (A, B, C)
+- Neutral: 3 parameters
+- Up to 86,400 minutes (60 days)
+
+
+UNITS REFERENCE:
+================
+
+Energy: Wh (Watt-hours) → kWh = Wh / 1000
+Power: W (Watts) → kW = W / 1000
+Apparent Power: VA (Volt-Ampere) → kVA = VA / 1000
+Reactive Energy: VARh (Volt-Ampere Reactive hours)
+Current: A (Amperes)
+Voltage: V (Volts)
+Frequency: Hz (Hertz)
+Power Factor: Dimensionless (0 to 1)
+
+
+ADDITIONAL RESOURCES:
+=====================
+
+Official Shelly API Documentation:
+- EM Component: https://shelly-api-docs.shelly.cloud/gen2/ComponentsAndServices/EM
+- EMData Component: https://shelly-api-docs.shelly.cloud/gen2/ComponentsAndServices/EMData
+- Pro 3EM Device: https://shelly-api-docs.shelly.cloud/gen2/Devices/ShellyPro3EM
+
+Script Files:
+- Main Script: shelly_pro_3em_energy_offset.js
+- Setup Guide: QUICK_SETUP.md
+- Full Documentation: README.md
+
+
+NEED HELP?
+==========
+
+1. Find your question in "COMMON QUESTIONS" above
+2. Locate the relevant file
+3. Read the documentation
+4. Check the examples in data_values_guide.txt
+5. Refer to the official API documentation if needed
+
+
+LAST UPDATED: October 2025
+===========================
