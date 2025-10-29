@@ -2,6 +2,10 @@
 
 A powerful script for the Shelly Pro 3EM that allows you to add custom offsets to energy readings and track consumption over specific periods with a convenient zero button.
 
+## Warning ⚠️
+
+The script functions very well if you set up all virtual components in the readme.
+MAke sure you set
 ## Features
 
 ✨ **Custom Energy Offsets** - Add or subtract values from each phase and total energy readings  
@@ -33,12 +37,19 @@ Navigate to **Settings → Virtual Components** in your Shelly web interface.
 
 **Create 4 Number Components for Display:**
 
+I did not manage to choose the values of the virtual components.
+Please change the values in the script according to your component id's
+
+(BTW a button id and a number id of value 200 can happily exist together...)
+
 | ID  | Name                 | Unit | Min   | Max       |
 |-----|----------------------|------|-------|-----------|
 | 100 | Phase A Total Energy | kWh  | 0     | 999999999 |
 | 101 | Phase B Total Energy | kWh  | 0     | 999999999 |
 | 102 | Phase C Total Energy | kWh  | 0     | 999999999 |
 | 103 | Total Energy         | kWh  | 0     | 999999999 |
+
+Set Min to -999999999 to allow negative values
 
 **Create 4 Number Components for Offsets:**
 
@@ -408,7 +419,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-MIT License - Feel free to use and modify as needed.
+GNU License
 
 ## Support
 
