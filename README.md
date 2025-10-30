@@ -5,7 +5,10 @@ A powerful script for the Shelly Pro 3EM that allows you to add custom offsets t
 ## Warning ⚠️
 
 The script functions very well if you set up all virtual components in the readme.
-MAke sure you set
+Make sure you modify the id's in the script if you have other values.
+
+BTW A button can have the same id as a number value. They work sid by side.
+
 ## Features
 
 ✨ **Custom Energy Offsets** - Add or subtract values from each phase and total energy readings  
