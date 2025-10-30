@@ -1,5 +1,7 @@
 # Shelly Pro 3EM Energy Offset Script
 
+**Experienced users:** See [README_PRO.md](README_PRO.md) for quick setup.
+
 A powerful script for the Shelly Pro 3EM that allows you to add custom offsets to energy readings and track consumption over specific periods with a convenient zero button.
 
 ## Warning ⚠️
